@@ -115,9 +115,7 @@ class DRV2605:
         self._write_u8(_DRV2605_REG_BREAK, 0)
         self._write_u8(_DRV2605_REG_AUDIOMAX, 0x64)
         # Set ERM open-loop mode.
-        # turn off N_ERM_LRA
-        feedback = self._read_u8(_DRV2605_REG_FEEDBACK)
-        self._write_u8(_DRV2605_REG_FEEDBACK, feedback & 0x7F)
+        self.use_ERM()
         # turn on ERM_OPEN_LOOP
         control3 = self._read_u8(_DRV2605_REG_CONTROL3)
         self._write_u8(_DRV2605_REG_CONTROL3, control3 | 0x20)
@@ -140,8 +138,8 @@ class DRV2605:
             self._BUFFER[1] = val & 0xFF
             i2c.write(self._BUFFER, end=2)
 
-    def start(self):
-        """Start vibrating the motor."""
+    def play(self):
+        """Play back the select effect(s) on the motor."""
         self._write_u8(_DRV2605_REG_GO, 1)
 
     def stop(self):
@@ -152,7 +150,7 @@ class DRV2605:
     def mode(self):
         """Get and set the mode of the chip.  Should be a value of:
           - MODE_INTTRIG: Internal triggering, vibrates as soon as you call
-            start() and stops after calling stop().  Default mode.
+            play().  Default mode.
           - MODE_EXTTRIGEDGE: External triggering, edge mode.
           - MODE_EXTTRIGLVL: External triggering, level mode.
           - MODE_PWMANALOG: PWM/analog input mode.
@@ -199,3 +197,13 @@ class DRV2605:
         assert 0 <= effect_id <= 123
         assert 0 <= slot <= 6
         self._write_u8(_DRV2605_REG_WAVESEQ1 + slot, effect_id)
+
+    def use_ERM(self):
+        """Use an eccentric rotating mass motor (the default)."""
+        feedback = self._read_u8(_DRV2605_REG_FEEDBACK)
+        self._write_u8(_DRV2605_REG_FEEDBACK, feedback & 0x7F)
+
+    def use_LRM(self):
+        """Use a linear resonance actuator motor."""
+        feedback = self._read_u8(_DRV2605_REG_FEEDBACK)
+        self._write_u8(_DRV2605_REG_FEEDBACK, feedback | 0x80)

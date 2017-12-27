@@ -24,10 +24,8 @@ while True:
     # them in interesting ways.  Use the slot keyword and specify a slot 0 to 6
     # (0 is the default).
     #drv.set_waveform(effect, slot=1)
-    drv.start()  # Start the playback.
+    drv.play()  # Play the effect.
     time.sleep(0.5)
-    # You can stop playback with stop, although not necessary here it looks like:
-    #drv.stop()  # Stop the playback.
     # Increment effect ID and wrap back around to 1.
     effect += 1
     if effect > 117:
