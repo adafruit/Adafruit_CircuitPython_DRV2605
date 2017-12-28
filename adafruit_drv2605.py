@@ -144,7 +144,7 @@ class DRV2605:
 
     def stop(self):
         """Stop vibrating the motor."""
-        self._write_u8(_DRV2605_REG_GO, 1)
+        self._write_u8(_DRV2605_REG_GO, 0)
 
     @property
     def mode(self):
