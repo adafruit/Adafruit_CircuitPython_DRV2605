@@ -198,11 +198,13 @@ class DRV2605:
         assert 0 <= slot <= 6
         self._write_u8(_DRV2605_REG_WAVESEQ1 + slot, effect_id)
 
+    # pylint: disable=invalid-name
     def use_ERM(self):
         """Use an eccentric rotating mass motor (the default)."""
         feedback = self._read_u8(_DRV2605_REG_FEEDBACK)
         self._write_u8(_DRV2605_REG_FEEDBACK, feedback & 0x7F)
 
+    # pylint: disable=invalid-name
     def use_LRM(self):
         """Use a linear resonance actuator motor."""
         feedback = self._read_u8(_DRV2605_REG_FEEDBACK)
