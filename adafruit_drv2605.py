@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 """
-`Adafruit_DRV2605`
+`adafruit_drv2605`
 ====================================================
 
 CircuitPython module for the DRV2605 haptic feedback motor driver.  See
@@ -160,7 +160,7 @@ class DRV2605:
           - MODE_REALTIME: Real-time playback mode.
           - MODE_DIAGNOS: Diagnostics mode.
           - MODE_AUTOCAL: Auto-calibration mode.
-          
+
         See the datasheet for the meaning of modes beyond MODE_INTTRIG.
         """
         return self._read_u8(_DRV2605_REG_MODE)
@@ -183,7 +183,7 @@ class DRV2605:
         - LIBRARY_TS2200D: TS2200 library D
         - LIBRARY_TS2200E: TS2200 library E
         - LIBRARY_LRA: LRA library
-        
+
         See the datasheet for the meaning and description of effects in each
         library.
         """
