@@ -149,7 +149,7 @@ class DRV2605:
     @property
     def mode(self):
         """
-        Get and set the mode of the chip.  Should be a value of:
+        The mode of the chip.  Should be a value of:
 
           - MODE_INTTRIG: Internal triggering, vibrates as soon as you call
             play().  Default mode.
@@ -173,7 +173,7 @@ class DRV2605:
     @property
     def library(self):
         """
-        Get and set the library selected for waveform playback.  Should be
+        The library selected for waveform playback.  Should be
         a value of:
 
         - LIBRARY_EMPTY: Empty
