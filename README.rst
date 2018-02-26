@@ -26,15 +26,7 @@ This is easily achieved by downloading
 Usage Example
 =============
 
-See examples/simpletest.py for a demo of the usage.
-
-API Reference
-=============
-
-.. toctree::
-   :maxdepth: 2
-
-   api
+See examples/drv2605_simpletest.py for a demo of the usage.
 
 Contributing
 ============
