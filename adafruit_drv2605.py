@@ -167,7 +167,8 @@ class DRV2605:
 
     @mode.setter
     def mode(self, val):
-        assert 0 <= val <= 7
+        if not 0 <= val <= 7:
+            raise ValueError('Mode must be a value within 0-7!')
         self._write_u8(_DRV2605_REG_MODE, val)
 
     @property
@@ -191,7 +192,8 @@ class DRV2605:
 
     @library.setter
     def library(self, val):
-        assert 0 <= val <= 6
+        if not 0 <= val <= 6:
+            raise ValueError('Library must be a value within 0-6!')
         self._write_u8(_DRV2605_REG_LIBRARY, val)
 
     def set_waveform(self, effect_id, slot=0):
@@ -200,8 +202,10 @@ class DRV2605:
         datasheet for a complete table of effect ID values and the associated
         waveform / effect.
         """
-        assert 0 <= effect_id <= 123
-        assert 0 <= slot <= 6
+        if not 0 <= effect_id <= 123:
+            raise ValueError('Effect ID must be a value within 0-123!')
+        if not 0 <= slot <= 6:
+            raise ValueError('Slot must be a value within 0-6!')
         self._write_u8(_DRV2605_REG_WAVESEQ1 + slot, effect_id)
 
     # pylint: disable=invalid-name
