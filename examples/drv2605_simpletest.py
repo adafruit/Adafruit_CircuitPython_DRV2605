@@ -19,11 +19,10 @@ drv = adafruit_drv2605.DRV2605(i2c)
 effect = 1
 while True:
     print('Playing effect #{0}'.format(effect))
-    drv.set_waveform(effect)  # Select the effect on slot 0.
-    # Optionally you can assign effects to up to 7 different slots to combine
-    # them in interesting ways.  Use the slot keyword and specify a slot 0 to 6
-    # (0 is the default).
-    #drv.set_waveform(effect, slot=1)
+    drv.sequence[0] = effect  # Set the effect on slot 0.
+    # You can assign effects to up to 7 different slots to combine
+    # them in interesting ways. Index the sequence property with a
+    # slot number 0 to 6.
     drv.play()  # Play the effect.
     time.sleep(0.5)
     # Increment effect ID and wrap back around to 1.
