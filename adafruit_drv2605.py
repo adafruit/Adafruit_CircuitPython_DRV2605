@@ -239,6 +239,7 @@ class Effect:
     """Class for adding an effect to the DRV2605 waveform sequence."""
     def __init__(self, effect_id):
         self._effect_id = 0
+        # pylint: disable=invalid-name
         self.id = effect_id
 
     @property
@@ -247,11 +248,13 @@ class Effect:
         return self._effect_id
 
     @property
+    # pylint: disable=invalid-name
     def id(self):
         """Return the effect ID."""
         return self._effect_id
 
     @id.setter
+    # pylint: disable=invalid-name
     def id(self, effect_id):
         """Set the effect ID."""
         if not 0 <= effect_id <= 123:
