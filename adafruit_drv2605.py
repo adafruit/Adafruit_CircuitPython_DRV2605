@@ -267,11 +267,9 @@ class Effect:
 
 
 class Pause:
-    """Class for adding a pause to the DRV2605 waveform sequence.
-    Duration is specified in tens of milliseconds, as per page 35
-    of the datasheet. I.e. Pause time = 10ms * duration
-    """
+    """DRV2605 waveform sequence timed delay."""
     def __init__(self, duration):
+        # Bit 7 must be set for a slot to be interpreted as a delay
         self._duration = 0x80
         self.duration = duration
 
@@ -282,15 +280,17 @@ class Pause:
 
     @property
     def duration(self):
-        """Return the pause duration."""
-        return self._duration & 0x7f
+        """Pause duration in seconds."""
+        # Remove wait time flag bit and convert duration to seconds
+        return (self._duration & 0x7f) / 100.0
 
     @duration.setter
     def duration(self, duration):
-        """Set the pause duration."""
-        if not 0 <= duration <= 127:
-            raise ValueError('Pause duration must be a value within 0-127!')
-        self._duration = 0x80 | duration
+        """Set the pause duration in seconds."""
+        if not 0.0 <= duration <= 1.27:
+            raise ValueError('Pause duration must be a value within 0.0-1.27!')
+        # Add wait time flag bit and convert duration to centiseconds
+        self._duration = 0x80 | round(duration * 100.0)
 
     def __repr__(self):
         return "{}({})".format(type(self).__qualname__, self.duration)
@@ -318,7 +318,7 @@ class _DRV2605_Sequence:
         # pylint: disable=protected-access
         slot_contents = self._drv2605._read_u8(_DRV2605_REG_WAVESEQ1 + slot)
         if slot_contents & 0x80:
-            return Pause(slot_contents & 0x7f)
+            return Pause((slot_contents & 0x7f) / 100.0)
         return Effect(slot_contents)
 
     def __iter__(self):

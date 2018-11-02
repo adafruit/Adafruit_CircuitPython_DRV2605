@@ -24,7 +24,7 @@ while True:
     # them in interesting ways. Index the sequence property with a
     # slot number 0 to 6.
     # Optionally, you can assign a pause to a slot. E.g.
-    # drv.sequence[1] = adafruit_drv2605.Pause(5)  # Pause for 50 milliseconds
+    # drv.sequence[1] = adafruit_drv2605.Pause(0.5)  # Pause for half a second
     drv.play()  # Play the effect.
     time.sleep(0.5)
     # Increment effect ID and wrap back around to 1.
