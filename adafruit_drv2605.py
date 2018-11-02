@@ -236,7 +236,7 @@ class DRV2605:
 
 
 class Effect:
-    """Class for adding an effect to the DRV2605 waveform sequence."""
+    """DRV2605 waveform sequence effect."""
     def __init__(self, effect_id):
         self._effect_id = 0
         # pylint: disable=invalid-name
@@ -244,13 +244,13 @@ class Effect:
 
     @property
     def raw_value(self):
-        """Return the raw effect ID."""
+        """Raw effect ID."""
         return self._effect_id
 
     @property
     # pylint: disable=invalid-name
     def id(self):
-        """Return the effect ID."""
+        """Effect ID."""
         return self._effect_id
 
     @id.setter
@@ -262,7 +262,6 @@ class Effect:
         self._effect_id = effect_id
 
     def __repr__(self):
-        """Return a string representation of the Effect class."""
         return "{}({})".format(type(self).__qualname__, self.id)
 
 
@@ -278,7 +277,7 @@ class Pause:
 
     @property
     def raw_value(self):
-        """Return the raw pause duration."""
+        """Raw pause duration."""
         return self._duration
 
     @property
@@ -294,7 +293,6 @@ class Pause:
         self._duration = 0x80 | duration
 
     def __repr__(self):
-        """Return a string representation of the Pause class."""
         return "{}({})".format(type(self).__qualname__, self.duration)
 
 
