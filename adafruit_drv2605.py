@@ -122,6 +122,7 @@ class DRV2605:
         # Default to internal trigger mode and TS2200 A library.
         self.mode = MODE_INTTRIG
         self.library = LIBRARY_TS2200A
+        self._sequence = _DRV2605_Sequence(self)
 
     def _read_u8(self, address):
         # Read an 8-bit unsigned value from the specified 8-bit address.
@@ -196,6 +197,18 @@ class DRV2605:
             raise ValueError('Library must be a value within 0-6!')
         self._write_u8(_DRV2605_REG_LIBRARY, val)
 
+    @property
+    def sequence(self):
+        """List-like sequence of waveform effects.
+        Get or set an effect waveform for slot 0-6 by indexing the sequence
+        property with the slot number. A slot must be set to either an Effect()
+        or Pause() class. See the datasheet for a complete table of effect ID
+        values and the associated waveform / effect.
+
+        E.g. 'slot_0_effect = drv.sequence[0]', 'drv.sequence[0] = Effect(88)'
+        """
+        return self._sequence
+
     def set_waveform(self, effect_id, slot=0):
         """Select an effect waveform for the specified slot (default is slot 0,
         but up to 7 effects can be combined with slot values 0 to 6).  See the
@@ -219,3 +232,100 @@ class DRV2605:
         """Use a linear resonance actuator motor."""
         feedback = self._read_u8(_DRV2605_REG_FEEDBACK)
         self._write_u8(_DRV2605_REG_FEEDBACK, feedback | 0x80)
+
+
+
+class Effect:
+    """DRV2605 waveform sequence effect."""
+    def __init__(self, effect_id):
+        self._effect_id = 0
+        # pylint: disable=invalid-name
+        self.id = effect_id
+
+    @property
+    def raw_value(self):
+        """Raw effect ID."""
+        return self._effect_id
+
+    @property
+    # pylint: disable=invalid-name
+    def id(self):
+        """Effect ID."""
+        return self._effect_id
+
+    @id.setter
+    # pylint: disable=invalid-name
+    def id(self, effect_id):
+        """Set the effect ID."""
+        if not 0 <= effect_id <= 123:
+            raise ValueError('Effect ID must be a value within 0-123!')
+        self._effect_id = effect_id
+
+    def __repr__(self):
+        return "{}({})".format(type(self).__qualname__, self.id)
+
+
+
+class Pause:
+    """DRV2605 waveform sequence timed delay."""
+    def __init__(self, duration):
+        # Bit 7 must be set for a slot to be interpreted as a delay
+        self._duration = 0x80
+        self.duration = duration
+
+    @property
+    def raw_value(self):
+        """Raw pause duration."""
+        return self._duration
+
+    @property
+    def duration(self):
+        """Pause duration in seconds."""
+        # Remove wait time flag bit and convert duration to seconds
+        return (self._duration & 0x7f) / 100.0
+
+    @duration.setter
+    def duration(self, duration):
+        """Set the pause duration in seconds."""
+        if not 0.0 <= duration <= 1.27:
+            raise ValueError('Pause duration must be a value within 0.0-1.27!')
+        # Add wait time flag bit and convert duration to centiseconds
+        self._duration = 0x80 | round(duration * 100.0)
+
+    def __repr__(self):
+        return "{}({})".format(type(self).__qualname__, self.duration)
+
+
+
+class _DRV2605_Sequence:
+    """Class to enable List-like indexing of the waveform sequence slots."""
+    def __init__(self, DRV2605_instance):
+        self._drv2605 = DRV2605_instance
+
+    def __setitem__(self, slot, effect):
+        """Write an Effect or Pause to a slot."""
+        if not 0 <= slot <= 6:
+            raise IndexError('Slot must be a value within 0-6!')
+        if not isinstance(effect, (Effect, Pause)):
+            raise TypeError('Effect must be either an Effect() or Pause()!')
+        # pylint: disable=protected-access
+        self._drv2605._write_u8(_DRV2605_REG_WAVESEQ1 + slot, effect.raw_value)
+
+    def __getitem__(self, slot):
+        """Read an effect ID from a slot. Returns either a Pause or Effect class."""
+        if not 0 <= slot <= 6:
+            raise IndexError('Slot must be a value within 0-6!')
+        # pylint: disable=protected-access
+        slot_contents = self._drv2605._read_u8(_DRV2605_REG_WAVESEQ1 + slot)
+        if slot_contents & 0x80:
+            return Pause((slot_contents & 0x7f) / 100.0)
+        return Effect(slot_contents)
+
+    def __iter__(self):
+        """Return an iterator over the waveform sequence slots."""
+        for slot in range(0, 7):
+            yield self[slot]
+
+    def __repr__(self):
+        """Return a string representation of all slot's effects."""
+        return repr([effect for effect in self])
