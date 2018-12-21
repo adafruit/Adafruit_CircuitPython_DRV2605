@@ -10,8 +10,8 @@ Introduction
     :target: https://discord.gg/nBQh6qu
     :alt: Discord
 
-.. image:: https://travis-ci.org/adafruit/Adafruit_CircuitPython_DRV2605.svg?branch=master
-    :target: https://travis-ci.org/adafruit/Adafruit_CircuitPython_DRV2605
+.. image:: https://travis-ci.com/adafruit/Adafruit_CircuitPython_DRV2605.svg?branch=master
+    :target: https://travis-ci.com/adafruit/Adafruit_CircuitPython_DRV2605
     :alt: Build Status
 
 CircuitPython module for the DRV2605 haptic feedback motor driver.
