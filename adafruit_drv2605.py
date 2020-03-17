@@ -328,4 +328,4 @@ class _DRV2605_Sequence:
 
     def __repr__(self):
         """Return a string representation of all slot's effects."""
-        return repr(list(effect for effect in self))
+        return repr(list(self))
