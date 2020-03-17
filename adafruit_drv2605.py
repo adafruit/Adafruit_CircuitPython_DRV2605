@@ -38,56 +38,57 @@ __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_DRV2605.git"
 
 # pylint: disable=bad-whitespace
 # Internal constants:
-_DRV2605_ADDR              = const(0x5A)
-_DRV2605_REG_STATUS        = const(0x00)
-_DRV2605_REG_MODE          = const(0x01)
-_DRV2605_REG_RTPIN         = const(0x02)
-_DRV2605_REG_LIBRARY       = const(0x03)
-_DRV2605_REG_WAVESEQ1      = const(0x04)
-_DRV2605_REG_WAVESEQ2      = const(0x05)
-_DRV2605_REG_WAVESEQ3      = const(0x06)
-_DRV2605_REG_WAVESEQ4      = const(0x07)
-_DRV2605_REG_WAVESEQ5      = const(0x08)
-_DRV2605_REG_WAVESEQ6      = const(0x09)
-_DRV2605_REG_WAVESEQ7      = const(0x0A)
-_DRV2605_REG_WAVESEQ8      = const(0x0B)
-_DRV2605_REG_GO            = const(0x0C)
-_DRV2605_REG_OVERDRIVE     = const(0x0D)
-_DRV2605_REG_SUSTAINPOS    = const(0x0E)
-_DRV2605_REG_SUSTAINNEG    = const(0x0F)
-_DRV2605_REG_BREAK         = const(0x10)
-_DRV2605_REG_AUDIOCTRL     = const(0x11)
-_DRV2605_REG_AUDIOLVL      = const(0x12)
-_DRV2605_REG_AUDIOMAX      = const(0x13)
-_DRV2605_REG_RATEDV        = const(0x16)
-_DRV2605_REG_CLAMPV        = const(0x17)
-_DRV2605_REG_AUTOCALCOMP   = const(0x18)
-_DRV2605_REG_AUTOCALEMP    = const(0x19)
-_DRV2605_REG_FEEDBACK      = const(0x1A)
-_DRV2605_REG_CONTROL1      = const(0x1B)
-_DRV2605_REG_CONTROL2      = const(0x1C)
-_DRV2605_REG_CONTROL3      = const(0x1D)
-_DRV2605_REG_CONTROL4      = const(0x1E)
-_DRV2605_REG_VBAT          = const(0x21)
-_DRV2605_REG_LRARESON      = const(0x22)
+_DRV2605_ADDR = const(0x5A)
+_DRV2605_REG_STATUS = const(0x00)
+_DRV2605_REG_MODE = const(0x01)
+_DRV2605_REG_RTPIN = const(0x02)
+_DRV2605_REG_LIBRARY = const(0x03)
+_DRV2605_REG_WAVESEQ1 = const(0x04)
+_DRV2605_REG_WAVESEQ2 = const(0x05)
+_DRV2605_REG_WAVESEQ3 = const(0x06)
+_DRV2605_REG_WAVESEQ4 = const(0x07)
+_DRV2605_REG_WAVESEQ5 = const(0x08)
+_DRV2605_REG_WAVESEQ6 = const(0x09)
+_DRV2605_REG_WAVESEQ7 = const(0x0A)
+_DRV2605_REG_WAVESEQ8 = const(0x0B)
+_DRV2605_REG_GO = const(0x0C)
+_DRV2605_REG_OVERDRIVE = const(0x0D)
+_DRV2605_REG_SUSTAINPOS = const(0x0E)
+_DRV2605_REG_SUSTAINNEG = const(0x0F)
+_DRV2605_REG_BREAK = const(0x10)
+_DRV2605_REG_AUDIOCTRL = const(0x11)
+_DRV2605_REG_AUDIOLVL = const(0x12)
+_DRV2605_REG_AUDIOMAX = const(0x13)
+_DRV2605_REG_RATEDV = const(0x16)
+_DRV2605_REG_CLAMPV = const(0x17)
+_DRV2605_REG_AUTOCALCOMP = const(0x18)
+_DRV2605_REG_AUTOCALEMP = const(0x19)
+_DRV2605_REG_FEEDBACK = const(0x1A)
+_DRV2605_REG_CONTROL1 = const(0x1B)
+_DRV2605_REG_CONTROL2 = const(0x1C)
+_DRV2605_REG_CONTROL3 = const(0x1D)
+_DRV2605_REG_CONTROL4 = const(0x1E)
+_DRV2605_REG_VBAT = const(0x21)
+_DRV2605_REG_LRARESON = const(0x22)
 
 # User-facing mode value constants:
-MODE_INTTRIG      = 0x00
-MODE_EXTTRIGEDGE  = 0x01
-MODE_EXTTRIGLVL   = 0x02
-MODE_PWMANALOG    = 0x03
-MODE_AUDIOVIBE    = 0x04
-MODE_REALTIME     = 0x05
-MODE_DIAGNOS      = 0x06
-MODE_AUTOCAL      = 0x07
-LIBRARY_EMPTY     = 0x00
-LIBRARY_TS2200A   = 0x01
-LIBRARY_TS2200B   = 0x02
-LIBRARY_TS2200C   = 0x03
-LIBRARY_TS2200D   = 0x04
-LIBRARY_TS2200E   = 0x05
-LIBRARY_LRA       = 0x06
+MODE_INTTRIG = 0x00
+MODE_EXTTRIGEDGE = 0x01
+MODE_EXTTRIGLVL = 0x02
+MODE_PWMANALOG = 0x03
+MODE_AUDIOVIBE = 0x04
+MODE_REALTIME = 0x05
+MODE_DIAGNOS = 0x06
+MODE_AUTOCAL = 0x07
+LIBRARY_EMPTY = 0x00
+LIBRARY_TS2200A = 0x01
+LIBRARY_TS2200B = 0x02
+LIBRARY_TS2200C = 0x03
+LIBRARY_TS2200D = 0x04
+LIBRARY_TS2200E = 0x05
+LIBRARY_LRA = 0x06
 # pylint: enable=bad-whitespace
+
 
 class DRV2605:
     """TI DRV2605 haptic feedback motor driver module."""
@@ -103,13 +104,13 @@ class DRV2605:
         status = self._read_u8(_DRV2605_REG_STATUS)
         device_id = (status >> 5) & 0x07
         if device_id not in (3, 7):
-            raise RuntimeError('Failed to find DRV2605, check wiring!')
+            raise RuntimeError("Failed to find DRV2605, check wiring!")
         # Configure registers to initialize chip.
-        self._write_u8(_DRV2605_REG_MODE, 0x00)     # out of standby
-        self._write_u8(_DRV2605_REG_RTPIN, 0x00)    # no real-time-playback
-        self._write_u8(_DRV2605_REG_WAVESEQ1, 1)    # strong click
+        self._write_u8(_DRV2605_REG_MODE, 0x00)  # out of standby
+        self._write_u8(_DRV2605_REG_RTPIN, 0x00)  # no real-time-playback
+        self._write_u8(_DRV2605_REG_WAVESEQ1, 1)  # strong click
         self._write_u8(_DRV2605_REG_WAVESEQ2, 0)
-        self._write_u8(_DRV2605_REG_OVERDRIVE, 0)   # no overdrive
+        self._write_u8(_DRV2605_REG_OVERDRIVE, 0)  # no overdrive
         self._write_u8(_DRV2605_REG_SUSTAINPOS, 0)
         self._write_u8(_DRV2605_REG_SUSTAINNEG, 0)
         self._write_u8(_DRV2605_REG_BREAK, 0)
@@ -168,7 +169,7 @@ class DRV2605:
     @mode.setter
     def mode(self, val):
         if not 0 <= val <= 7:
-            raise ValueError('Mode must be a value within 0-7!')
+            raise ValueError("Mode must be a value within 0-7!")
         self._write_u8(_DRV2605_REG_MODE, val)
 
     @property
@@ -193,7 +194,7 @@ class DRV2605:
     @library.setter
     def library(self, val):
         if not 0 <= val <= 6:
-            raise ValueError('Library must be a value within 0-6!')
+            raise ValueError("Library must be a value within 0-6!")
         self._write_u8(_DRV2605_REG_LIBRARY, val)
 
     @property
@@ -215,9 +216,9 @@ class DRV2605:
         waveform / effect.
         """
         if not 0 <= effect_id <= 123:
-            raise ValueError('Effect ID must be a value within 0-123!')
+            raise ValueError("Effect ID must be a value within 0-123!")
         if not 0 <= slot <= 6:
-            raise ValueError('Slot must be a value within 0-6!')
+            raise ValueError("Slot must be a value within 0-6!")
         self._write_u8(_DRV2605_REG_WAVESEQ1 + slot, effect_id)
 
     # pylint: disable=invalid-name
@@ -233,9 +234,9 @@ class DRV2605:
         self._write_u8(_DRV2605_REG_FEEDBACK, feedback | 0x80)
 
 
-
 class Effect:
     """DRV2605 waveform sequence effect."""
+
     def __init__(self, effect_id):
         self._effect_id = 0
         # pylint: disable=invalid-name
@@ -257,16 +258,16 @@ class Effect:
     def id(self, effect_id):
         """Set the effect ID."""
         if not 0 <= effect_id <= 123:
-            raise ValueError('Effect ID must be a value within 0-123!')
+            raise ValueError("Effect ID must be a value within 0-123!")
         self._effect_id = effect_id
 
     def __repr__(self):
         return "{}({})".format(type(self).__qualname__, self.id)
 
 
-
 class Pause:
     """DRV2605 waveform sequence timed delay."""
+
     def __init__(self, duration):
         # Bit 7 must be set for a slot to be interpreted as a delay
         self._duration = 0x80
@@ -281,13 +282,13 @@ class Pause:
     def duration(self):
         """Pause duration in seconds."""
         # Remove wait time flag bit and convert duration to seconds
-        return (self._duration & 0x7f) / 100.0
+        return (self._duration & 0x7F) / 100.0
 
     @duration.setter
     def duration(self, duration):
         """Set the pause duration in seconds."""
         if not 0.0 <= duration <= 1.27:
-            raise ValueError('Pause duration must be a value within 0.0-1.27!')
+            raise ValueError("Pause duration must be a value within 0.0-1.27!")
         # Add wait time flag bit and convert duration to centiseconds
         self._duration = 0x80 | round(duration * 100.0)
 
@@ -295,29 +296,29 @@ class Pause:
         return "{}({})".format(type(self).__qualname__, self.duration)
 
 
-
 class _DRV2605_Sequence:
     """Class to enable List-like indexing of the waveform sequence slots."""
+
     def __init__(self, DRV2605_instance):
         self._drv2605 = DRV2605_instance
 
     def __setitem__(self, slot, effect):
         """Write an Effect or Pause to a slot."""
         if not 0 <= slot <= 6:
-            raise IndexError('Slot must be a value within 0-6!')
+            raise IndexError("Slot must be a value within 0-6!")
         if not isinstance(effect, (Effect, Pause)):
-            raise TypeError('Effect must be either an Effect() or Pause()!')
+            raise TypeError("Effect must be either an Effect() or Pause()!")
         # pylint: disable=protected-access
         self._drv2605._write_u8(_DRV2605_REG_WAVESEQ1 + slot, effect.raw_value)
 
     def __getitem__(self, slot):
         """Read an effect ID from a slot. Returns either a Pause or Effect class."""
         if not 0 <= slot <= 6:
-            raise IndexError('Slot must be a value within 0-6!')
+            raise IndexError("Slot must be a value within 0-6!")
         # pylint: disable=protected-access
         slot_contents = self._drv2605._read_u8(_DRV2605_REG_WAVESEQ1 + slot)
         if slot_contents & 0x80:
-            return Pause((slot_contents & 0x7f) / 100.0)
+            return Pause((slot_contents & 0x7F) / 100.0)
         return Effect(slot_contents)
 
     def __iter__(self):
@@ -327,4 +328,4 @@ class _DRV2605_Sequence:
 
     def __repr__(self):
         """Return a string representation of all slot's effects."""
-        return repr([effect for effect in self])
+        return repr(list(self))
