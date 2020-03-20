@@ -286,7 +286,7 @@ class Pause:
 
     @duration.setter
     def duration(self, duration):
-        """Set the pause duration in seconds."""
+        """Sets the pause duration in seconds."""
         if not 0.0 <= duration <= 1.27:
             raise ValueError("Pause duration must be a value within 0.0-1.27!")
         # Add wait time flag bit and convert duration to centiseconds
