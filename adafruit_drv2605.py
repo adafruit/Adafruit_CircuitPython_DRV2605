@@ -150,7 +150,7 @@ class DRV2605:
     @property
     def mode(self):
         """
-        The mode of the chip.  Should be a value of:
+        The mode of the chip. Should be a value of:
 
           - MODE_INTTRIG: Internal triggering, vibrates as soon as you call
             play().  Default mode.
@@ -322,7 +322,7 @@ class _DRV2605_Sequence:
         return Effect(slot_contents)
 
     def __iter__(self):
-        """Return an iterator over the waveform sequence slots."""
+        """Returns an iterator over the waveform sequence slots."""
         for slot in range(0, 7):
             yield self[slot]
 
