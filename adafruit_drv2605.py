@@ -36,7 +36,6 @@ __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_DRV2605.git"
 
 
-# pylint: disable=bad-whitespace
 # Internal constants:
 _DRV2605_ADDR = const(0x5A)
 _DRV2605_REG_STATUS = const(0x00)
@@ -87,7 +86,6 @@ LIBRARY_TS2200C = 0x03
 LIBRARY_TS2200D = 0x04
 LIBRARY_TS2200E = 0x05
 LIBRARY_LRA = 0x06
-# pylint: enable=bad-whitespace
 
 
 class DRV2605:
