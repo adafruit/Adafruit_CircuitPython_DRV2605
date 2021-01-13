@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 # Simple demo of the DRV2605 haptic feedback motor driver.
 # Will play all 123 effects in order for about a half second each.
 # Author: Tony DiCola
