@@ -169,13 +169,13 @@ class DRV2605:
         The library selected for waveform playback.  Should be
         a value of:
 
-        - LIBRARY_EMPTY: Empty
-        - LIBRARY_TS2200A: TS2200 library A  (the default)
-        - LIBRARY_TS2200B: TS2200 library B
-        - LIBRARY_TS2200C: TS2200 library C
-        - LIBRARY_TS2200D: TS2200 library D
-        - LIBRARY_TS2200E: TS2200 library E
-        - LIBRARY_LRA: LRA library
+          * ``LIBRARY_EMPTY``: Empty
+          * ``LIBRARY_TS2200A``: TS2200 library A  (the default)
+          * ``LIBRARY_TS2200B``: TS2200 library B
+          * ``LIBRARY_TS2200C``: TS2200 library C
+          * ``LIBRARY_TS2200D``: TS2200 library D
+          * ``LIBRARY_TS2200E``: TS2200 library E
+          * ``LIBRARY_LRA``: LRA library
 
         See the datasheet for the meaning and description of effects in each
         library.
