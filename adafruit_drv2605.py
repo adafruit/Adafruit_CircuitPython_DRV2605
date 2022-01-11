@@ -15,6 +15,12 @@ from micropython import const
 
 from adafruit_bus_device.i2c_device import I2CDevice
 
+try:
+    from typing import Union
+    from busio import I2C
+except ImportError:
+    pass
+
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_DRV2605.git"
 
@@ -72,14 +78,18 @@ LIBRARY_LRA = 0x06
 
 
 class DRV2605:
-    """TI DRV2605 haptic feedback motor driver module."""
+    """TI DRV2605 haptic feedback motor driver module.
+
+    :param I2C i2c: The board I2C object
+    :param int address: The I2C address
+    """
 
     # Class-level buffer for reading and writing data with the sensor.
     # This reduces memory allocations but means the code is not re-entrant or
     # thread safe!
     _BUFFER = bytearray(2)
 
-    def __init__(self, i2c, address=_DRV2605_ADDR):
+    def __init__(self, i2c: I2C, address: int = _DRV2605_ADDR) -> None:
         self._device = I2CDevice(i2c, address)
         # Check chip ID is 3 or 7 (DRV2605 or DRV2605L).
         status = self._read_u8(_DRV2605_REG_STATUS)
@@ -106,66 +116,66 @@ class DRV2605:
         self.library = LIBRARY_TS2200A
         self._sequence = _DRV2605_Sequence(self)
 
-    def _read_u8(self, address):
+    def _read_u8(self, address: int) -> int:
         # Read an 8-bit unsigned value from the specified 8-bit address.
         with self._device as i2c:
             self._BUFFER[0] = address & 0xFF
             i2c.write_then_readinto(self._BUFFER, self._BUFFER, out_end=1, in_end=1)
         return self._BUFFER[0]
 
-    def _write_u8(self, address, val):
+    def _write_u8(self, address: int, val: int) -> None:
         # Write an 8-bit unsigned value to the specified 8-bit address.
         with self._device as i2c:
             self._BUFFER[0] = address & 0xFF
             self._BUFFER[1] = val & 0xFF
             i2c.write(self._BUFFER, end=2)
 
-    def play(self):
+    def play(self) -> None:
         """Play back the select effect(s) on the motor."""
         self._write_u8(_DRV2605_REG_GO, 1)
 
-    def stop(self):
+    def stop(self) -> None:
         """Stop vibrating the motor."""
         self._write_u8(_DRV2605_REG_GO, 0)
 
     @property
-    def mode(self):
+    def mode(self) -> int:
         """
         The mode of the chip. Should be a value of:
 
-          - MODE_INTTRIG: Internal triggering, vibrates as soon as you call
+          * ``MODE_INTTRIG``: Internal triggering, vibrates as soon as you call
             play().  Default mode.
-          - MODE_EXTTRIGEDGE: External triggering, edge mode.
-          - MODE_EXTTRIGLVL: External triggering, level mode.
-          - MODE_PWMANALOG: PWM/analog input mode.
-          - MODE_AUDIOVIBE: Audio-to-vibration mode.
-          - MODE_REALTIME: Real-time playback mode.
-          - MODE_DIAGNOS: Diagnostics mode.
-          - MODE_AUTOCAL: Auto-calibration mode.
+          * ``MODE_EXTTRIGEDGE``: External triggering, edge mode.
+          * ``MODE_EXTTRIGLVL``: External triggering, level mode.
+          * ``MODE_PWMANALOG``: PWM/analog input mode.
+          * ``MODE_AUDIOVIBE``: Audio-to-vibration mode.
+          * ``MODE_REALTIME``: Real-time playback mode.
+          * ``MODE_DIAGNOS``: Diagnostics mode.
+          * ``MODE_AUTOCAL``: Auto-calibration mode.
 
         See the datasheet for the meaning of modes beyond MODE_INTTRIG.
         """
         return self._read_u8(_DRV2605_REG_MODE)
 
     @mode.setter
-    def mode(self, val):
+    def mode(self, val: int) -> None:
         if not 0 <= val <= 7:
             raise ValueError("Mode must be a value within 0-7!")
         self._write_u8(_DRV2605_REG_MODE, val)
 
     @property
-    def library(self):
+    def library(self) -> int:
         """
         The library selected for waveform playback.  Should be
         a value of:
 
-        - LIBRARY_EMPTY: Empty
-        - LIBRARY_TS2200A: TS2200 library A  (the default)
-        - LIBRARY_TS2200B: TS2200 library B
-        - LIBRARY_TS2200C: TS2200 library C
-        - LIBRARY_TS2200D: TS2200 library D
-        - LIBRARY_TS2200E: TS2200 library E
-        - LIBRARY_LRA: LRA library
+          * ``LIBRARY_EMPTY``: Empty
+          * ``LIBRARY_TS2200A``: TS2200 library A  (the default)
+          * ``LIBRARY_TS2200B``: TS2200 library B
+          * ``LIBRARY_TS2200C``: TS2200 library C
+          * ``LIBRARY_TS2200D``: TS2200 library D
+          * ``LIBRARY_TS2200E``: TS2200 library E
+          * ``LIBRARY_LRA``: LRA library
 
         See the datasheet for the meaning and description of effects in each
         library.
@@ -173,28 +183,40 @@ class DRV2605:
         return self._read_u8(_DRV2605_REG_LIBRARY) & 0x07
 
     @library.setter
-    def library(self, val):
+    def library(self, val: int) -> None:
         if not 0 <= val <= 6:
             raise ValueError("Library must be a value within 0-6!")
         self._write_u8(_DRV2605_REG_LIBRARY, val)
 
     @property
-    def sequence(self):
+    def sequence(self) -> "_DRV2605_Sequence":
         """List-like sequence of waveform effects.
-        Get or set an effect waveform for slot 0-7 by indexing the sequence
-        property with the slot number. A slot must be set to either an Effect()
-        or Pause() class. See the datasheet for a complete table of effect ID
+        Get or set an effect waveform for slot 0-6 by indexing the sequence
+        property with the slot number. A slot must be set to either an :class:`~Effect`
+        or :class:`~Pause` class. See the datasheet for a complete table of effect ID
         values and the associated waveform / effect.
 
-        E.g. 'slot_0_effect = drv.sequence[0]', 'drv.sequence[0] = Effect(88)'
+        E.g.:
+        .. code-block:: python
+
+            # Getting the effect stored in a slot
+            slot_0_effect = drv.sequence[0]
+
+        .. code-block:: python
+
+            # Setting an Effect in the first sequence slot
+            drv.sequence[0] = Effect(88)
         """
         return self._sequence
 
-    def set_waveform(self, effect_id, slot=0):
+    def set_waveform(self, effect_id: int, slot: int = 0) -> None:
         """Select an effect waveform for the specified slot (default is slot 0,
         but up to 8 effects can be combined with slot values 0 to 7).  See the
         datasheet for a complete table of effect ID values and the associated
         waveform / effect.
+
+        :param int effect_id: The effect ID of the waveform
+        :param int slot: The sequence slot to use
         """
         if not 0 <= effect_id <= 123:
             raise ValueError("Effect ID must be a value within 0-123!")
@@ -203,87 +225,96 @@ class DRV2605:
         self._write_u8(_DRV2605_REG_WAVESEQ1 + slot, effect_id)
 
     # pylint: disable=invalid-name
-    def use_ERM(self):
+    def use_ERM(self) -> None:
         """Use an eccentric rotating mass motor (the default)."""
         feedback = self._read_u8(_DRV2605_REG_FEEDBACK)
         self._write_u8(_DRV2605_REG_FEEDBACK, feedback & 0x7F)
 
     # pylint: disable=invalid-name
-    def use_LRM(self):
+    def use_LRM(self) -> None:
         """Use a linear resonance actuator motor."""
         feedback = self._read_u8(_DRV2605_REG_FEEDBACK)
         self._write_u8(_DRV2605_REG_FEEDBACK, feedback | 0x80)
 
 
 class Effect:
-    """DRV2605 waveform sequence effect."""
+    """DRV2605 waveform sequence effect.
 
-    def __init__(self, effect_id):
+    :param int effect_id: The ID number of the effect
+    """
+
+    def __init__(self, effect_id: int) -> None:
         self._effect_id = 0
         # pylint: disable=invalid-name
         self.id = effect_id
 
     @property
-    def raw_value(self):
+    def raw_value(self) -> int:
         """Raw effect ID."""
         return self._effect_id
 
     @property
     # pylint: disable=invalid-name
-    def id(self):
+    def id(self) -> int:
         """Effect ID."""
         return self._effect_id
 
     @id.setter
     # pylint: disable=invalid-name
-    def id(self, effect_id):
+    def id(self, effect_id: int) -> None:
         """Set the effect ID."""
         if not 0 <= effect_id <= 123:
             raise ValueError("Effect ID must be a value within 0-123!")
         self._effect_id = effect_id
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "{}({})".format(type(self).__qualname__, self.id)
 
 
 class Pause:
-    """DRV2605 waveform sequence timed delay."""
+    """DRV2605 waveform sequence timed delay.
 
-    def __init__(self, duration):
+    :param float duration: The duration of the pause in seconds
+    """
+
+    def __init__(self, duration: float) -> None:
         # Bit 7 must be set for a slot to be interpreted as a delay
         self._duration = 0x80
         self.duration = duration
 
     @property
-    def raw_value(self):
+    def raw_value(self) -> int:
         """Raw pause duration."""
         return self._duration
 
     @property
-    def duration(self):
+    def duration(self) -> float:
         """Pause duration in seconds."""
         # Remove wait time flag bit and convert duration to seconds
         return (self._duration & 0x7F) / 100.0
 
     @duration.setter
-    def duration(self, duration):
+    def duration(self, duration: float) -> None:
         """Sets the pause duration in seconds."""
         if not 0.0 <= duration <= 1.27:
             raise ValueError("Pause duration must be a value within 0.0-1.27!")
         # Add wait time flag bit and convert duration to centiseconds
         self._duration = 0x80 | round(duration * 100.0)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "{}({})".format(type(self).__qualname__, self.duration)
 
 
 class _DRV2605_Sequence:
-    """Class to enable List-like indexing of the waveform sequence slots."""
+    """Class to enable List-like indexing of the waveform sequence slots.
 
-    def __init__(self, DRV2605_instance):
+    :param DRV2605 DRV2605_instance: The DRV2605 instance
+    """
+
+    def __init__(self, DRV2605_instance: DRV2605) -> None:
         self._drv2605 = DRV2605_instance
 
-    def __setitem__(self, slot, effect):
+    def __setitem__(self, slot: int, effect: Union[Effect, Pause]) -> None:
         """Write an Effect or Pause to a slot."""
         if not 0 <= slot <= 7:
             raise IndexError("Slot must be a value within 0-6!")
@@ -292,7 +323,7 @@ class _DRV2605_Sequence:
         # pylint: disable=protected-access
         self._drv2605._write_u8(_DRV2605_REG_WAVESEQ1 + slot, effect.raw_value)
 
-    def __getitem__(self, slot):
+    def __getitem__(self, slot: int) -> Union[Effect, Pause]:
         """Read an effect ID from a slot. Returns either a Pause or Effect class."""
         if not 0 <= slot <= 7:
             raise IndexError("Slot must be a value within 0-6!")
@@ -302,11 +333,11 @@ class _DRV2605_Sequence:
             return Pause((slot_contents & 0x7F) / 100.0)
         return Effect(slot_contents)
 
-    def __iter__(self):
+    def __iter__(self) -> Union[Effect, Pause]:
         """Returns an iterator over the waveform sequence slots."""
         for slot in range(0, 8):
             yield self[slot]
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Return a string representation of all slot's effects."""
         return repr(list(self))
