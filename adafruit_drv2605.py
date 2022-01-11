@@ -181,7 +181,7 @@ class DRV2605:
     @property
     def sequence(self):
         """List-like sequence of waveform effects.
-        Get or set an effect waveform for slot 0-6 by indexing the sequence
+        Get or set an effect waveform for slot 0-7 by indexing the sequence
         property with the slot number. A slot must be set to either an Effect()
         or Pause() class. See the datasheet for a complete table of effect ID
         values and the associated waveform / effect.
@@ -192,14 +192,14 @@ class DRV2605:
 
     def set_waveform(self, effect_id, slot=0):
         """Select an effect waveform for the specified slot (default is slot 0,
-        but up to 7 effects can be combined with slot values 0 to 6).  See the
+        but up to 8 effects can be combined with slot values 0 to 7).  See the
         datasheet for a complete table of effect ID values and the associated
         waveform / effect.
         """
         if not 0 <= effect_id <= 123:
             raise ValueError("Effect ID must be a value within 0-123!")
-        if not 0 <= slot <= 6:
-            raise ValueError("Slot must be a value within 0-6!")
+        if not 0 <= slot <= 7:
+            raise ValueError("Slot must be a value within 0-7!")
         self._write_u8(_DRV2605_REG_WAVESEQ1 + slot, effect_id)
 
     # pylint: disable=invalid-name
@@ -285,7 +285,7 @@ class _DRV2605_Sequence:
 
     def __setitem__(self, slot, effect):
         """Write an Effect or Pause to a slot."""
-        if not 0 <= slot <= 6:
+        if not 0 <= slot <= 7:
             raise IndexError("Slot must be a value within 0-6!")
         if not isinstance(effect, (Effect, Pause)):
             raise TypeError("Effect must be either an Effect() or Pause()!")
@@ -294,7 +294,7 @@ class _DRV2605_Sequence:
 
     def __getitem__(self, slot):
         """Read an effect ID from a slot. Returns either a Pause or Effect class."""
-        if not 0 <= slot <= 6:
+        if not 0 <= slot <= 7:
             raise IndexError("Slot must be a value within 0-6!")
         # pylint: disable=protected-access
         slot_contents = self._drv2605._read_u8(_DRV2605_REG_WAVESEQ1 + slot)
@@ -304,7 +304,7 @@ class _DRV2605_Sequence:
 
     def __iter__(self):
         """Returns an iterator over the waveform sequence slots."""
-        for slot in range(0, 7):
+        for slot in range(0, 8):
             yield self[slot]
 
     def __repr__(self):
