@@ -198,12 +198,12 @@ class DRV2605:
 
         E.g.:
         .. code-block:: python
-           # Getting the effect stored in a slot
-           slot_0_effect = drv.sequence[0]
+            # Getting the effect stored in a slot
+            slot_0_effect = drv.sequence[0]
 
         .. code-block:: python
-           # Setting an Effect in the first sequence slot
-           drv.sequence[0] = Effect(88)
+            # Setting an Effect in the first sequence slot
+            drv.sequence[0] = Effect(88)
         """
         return self._sequence
 
