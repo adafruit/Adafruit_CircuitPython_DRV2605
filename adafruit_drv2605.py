@@ -196,7 +196,14 @@ class DRV2605:
         or :class:`~Pause` class. See the datasheet for a complete table of effect ID
         values and the associated waveform / effect.
 
-        E.g. 'slot_0_effect = drv.sequence[0]', 'drv.sequence[0] = Effect(88)'
+        E.g.:
+        .. code-block:: python
+           # Getting the effect stored in a slot
+           slot_0_effect = drv.sequence[0]
+
+        .. code-block:: python
+           # Setting an Effect in the first sequence slot
+           drv.sequence[0] = Effect(88)
         """
         return self._sequence
 
