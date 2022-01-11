@@ -263,7 +263,10 @@ class Effect:
 
 
 class Pause:
-    """DRV2605 waveform sequence timed delay."""
+    """DRV2605 waveform sequence timed delay.
+
+    :param float duration: The duration of the pause in seconds
+    """
 
     def __init__(self, duration: float) -> None:
         # Bit 7 must be set for a slot to be interpreted as a delay
