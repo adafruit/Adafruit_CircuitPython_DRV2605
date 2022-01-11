@@ -192,8 +192,8 @@ class DRV2605:
     def sequence(self) -> "_DRV2605_Sequence":
         """List-like sequence of waveform effects.
         Get or set an effect waveform for slot 0-6 by indexing the sequence
-        property with the slot number. A slot must be set to either an Effect()
-        or Pause() class. See the datasheet for a complete table of effect ID
+        property with the slot number. A slot must be set to either an :class:`~Effect`
+        or :class:`~Pause` class. See the datasheet for a complete table of effect ID
         values and the associated waveform / effect.
 
         E.g. 'slot_0_effect = drv.sequence[0]', 'drv.sequence[0] = Effect(88)'
