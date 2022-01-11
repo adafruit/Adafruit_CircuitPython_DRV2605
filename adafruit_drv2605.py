@@ -79,7 +79,7 @@ LIBRARY_LRA = 0x06
 
 class DRV2605:
     """TI DRV2605 haptic feedback motor driver module.
-    
+
     :param I2C i2c: The board I2C object
     :param int address: The I2C address
     """
@@ -189,7 +189,7 @@ class DRV2605:
         self._write_u8(_DRV2605_REG_LIBRARY, val)
 
     @property
-    def sequence(self) -> '_DRV2605_Sequence':
+    def sequence(self) -> "_DRV2605_Sequence":
         """List-like sequence of waveform effects.
         Get or set an effect waveform for slot 0-6 by indexing the sequence
         property with the slot number. A slot must be set to either an Effect()
@@ -230,7 +230,7 @@ class DRV2605:
 
 class Effect:
     """DRV2605 waveform sequence effect.
-    
+
     :param int effect_id: The ID number of the effect
     """
 
@@ -295,7 +295,7 @@ class Pause:
 
 class _DRV2605_Sequence:
     """Class to enable List-like indexing of the waveform sequence slots.
-    
+
     :param DRV2605 DRV2605_instance: The DRV2605 instance
     """
 
