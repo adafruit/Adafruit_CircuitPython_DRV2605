@@ -318,7 +318,7 @@ class _DRV2605_Sequence:
         if not 0 <= slot <= 7:
             raise IndexError("Slot must be a value within 0-7!")
         if not isinstance(effect, (Effect, Pause)):
-            raise TypeError("Effect must be either an Effect() or Pause()!")
+            raise TypeError("Effect must be either an Effect or Pause!")
         # pylint: disable=protected-access
         self._drv2605._write_u8(_DRV2605_REG_WAVESEQ1 + slot, effect.raw_value)
 
