@@ -191,18 +191,17 @@ class DRV2605:
     @property
     def sequence(self) -> "_DRV2605_Sequence":
         """List-like sequence of waveform effects.
-        Get or set an effect waveform for slot 0-6 by indexing the sequence
+        Get or set an effect waveform for slot 0-7 by indexing the sequence
         property with the slot number. A slot must be set to either an :class:`~Effect`
         or :class:`~Pause` class. See the datasheet for a complete table of effect ID
         values and the associated waveform / effect.
 
         E.g.:
+
         .. code-block:: python
 
             # Getting the effect stored in a slot
             slot_0_effect = drv.sequence[0]
-
-        .. code-block:: python
 
             # Setting an Effect in the first sequence slot
             drv.sequence[0] = Effect(88)
@@ -317,16 +316,16 @@ class _DRV2605_Sequence:
     def __setitem__(self, slot: int, effect: Union[Effect, Pause]) -> None:
         """Write an Effect or Pause to a slot."""
         if not 0 <= slot <= 7:
-            raise IndexError("Slot must be a value within 0-6!")
+            raise IndexError("Slot must be a value within 0-7!")
         if not isinstance(effect, (Effect, Pause)):
-            raise TypeError("Effect must be either an Effect() or Pause()!")
+            raise TypeError("Effect must be either an Effect or Pause!")
         # pylint: disable=protected-access
         self._drv2605._write_u8(_DRV2605_REG_WAVESEQ1 + slot, effect.raw_value)
 
     def __getitem__(self, slot: int) -> Union[Effect, Pause]:
         """Read an effect ID from a slot. Returns either a Pause or Effect class."""
         if not 0 <= slot <= 7:
-            raise IndexError("Slot must be a value within 0-6!")
+            raise IndexError("Slot must be a value within 0-7!")
         # pylint: disable=protected-access
         slot_contents = self._drv2605._read_u8(_DRV2605_REG_WAVESEQ1 + slot)
         if slot_contents & 0x80:
