@@ -197,12 +197,11 @@ class DRV2605:
         values and the associated waveform / effect.
 
         E.g.:
+
         .. code-block:: python
 
             # Getting the effect stored in a slot
             slot_0_effect = drv.sequence[0]
-
-        .. code-block:: python
 
             # Setting an Effect in the first sequence slot
             drv.sequence[0] = Effect(88)
