@@ -310,7 +310,9 @@ class _DRV2605_Sequence:
     :param DRV2605 DRV2605_instance: The DRV2605 instance
     """
 
-    def __init__(self, DRV2605_instance: DRV2605) -> None:
+    def __init__(
+        self, DRV2605_instance: DRV2605  # pylint: disable=invalid-name
+    ) -> None:
         self._drv2605 = DRV2605_instance
 
     def __setitem__(self, slot: int, effect: Union[Effect, Pause]) -> None:
