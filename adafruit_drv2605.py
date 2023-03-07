@@ -208,6 +208,12 @@ class DRV2605:
         """
         return self._sequence
 
+    def set_realtime_value(self, val: int) -> None:
+        """Set the output value (amplitude) used for Real-Time Playback"""
+        if not 0 <= val <= 255:
+            raise ValueError("Real-Time Playback value must be a value within 0-255!")
+        self._write_u8(_DRV2605_REG_RTPIN, val)
+
     def set_waveform(self, effect_id: int, slot: int = 0) -> None:
         """Select an effect waveform for the specified slot (default is slot 0,
         but up to 8 effects can be combined with slot values 0 to 7).  See the
