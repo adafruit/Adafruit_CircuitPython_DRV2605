@@ -209,7 +209,10 @@ class DRV2605:
         return self._sequence
 
     def set_realtime_value(self, val: int) -> None:
-        """Set the output value (amplitude) used for Real-Time Playback"""
+        """Set the output value used for Real-Time Playback. By default, the device
+        interprets the value as SIGNED (2s complement), and its effect depends on
+        other operating parameters. Consult the datasheet for more information!
+        """
         if not 0 <= val <= 255:
             raise ValueError("Real-Time Playback value must be a value within 0-255!")
         self._write_u8(_DRV2605_REG_RTPIN, val)
