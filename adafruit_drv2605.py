@@ -208,11 +208,33 @@ class DRV2605:
         """
         return self._sequence
 
-    def set_realtime_value(self, val: int) -> None:
-        """Set the output value used for Real-Time Playback. By default, the device
-        interprets the value as SIGNED (2s complement), and its effect depends on
-        other operating parameters. Consult the datasheet for more information!
+    @property
+    def realtime_value(self) -> int:
+        """The output value used in Real-Time Playback mode. When the device is
+        switched to ``MODE_REALTIME``, the motor is driven continuously with an
+        amplitude/direction determined by this value.
+
+        By default, the device interprets it as SIGNED (2s complement), and its exact
+        effect depends on other operating parameters.
+
+        See the datasheet for more information!
+
+        E.g.:
+
+        .. code-block:: python
+
+            # Configure the output amplitude to 50%
+            drv.realtime_value = 64
+
+            # Buzz the motor briefly
+            drv.mode = adafruit_drv2605.MODE_REALTIME
+            time.sleep(0.25)
+            drv.mode = adafruit_drv2605.MODE_INTTRIG
         """
+        return self._read_u8(_DRV2605_REG_RTPIN)
+
+    @realtime_value.setter
+    def realtime_value(self, val: int) -> None:
         if not 0 <= val <= 255:
             raise ValueError("Real-Time Playback value must be a value within 0-255!")
         self._write_u8(_DRV2605_REG_RTPIN, val)
