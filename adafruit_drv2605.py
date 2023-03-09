@@ -243,7 +243,7 @@ class DRV2605:
     @realtime_value.setter
     def realtime_value(self, val: int) -> None:
         if not -127 <= val <= 255:
-            raise ValueError("Real-Time Playback value must be a value between -127 and 255!")
+            raise ValueError("Real-Time Playback value must be between -127 and 255!")
         self._write_u8(_DRV2605_REG_RTPIN, val)
 
     def set_waveform(self, effect_id: int, slot: int = 0) -> None:
