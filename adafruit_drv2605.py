@@ -214,8 +214,9 @@ class DRV2605:
         switched to ``MODE_REALTIME``, the motor is driven continuously with an
         amplitude/direction determined by this value.
 
-        By default, the device interprets it as SIGNED (2s complement), and its exact
-        effect depends on other operating parameters.
+        By default, the device expects a SIGNED 8-bit integer, and its exact
+        effect depends on both the type of motor (ERM/LRA) and whether the device
+        is operating in open- or closed-loop (unidirectional/bidirectional) mode.
 
         See the datasheet for more information!
 
@@ -223,20 +224,26 @@ class DRV2605:
 
         .. code-block:: python
 
-            # Configure the output amplitude to 50%
-            drv.realtime_value = 64
-
-            # Buzz the motor briefly
+            # Start real-time playback
+            drv.realtime_value = 0
             drv.mode = adafruit_drv2605.MODE_REALTIME
-            time.sleep(0.25)
+
+            # Buzz the motor briefly at 50% and 100% amplitude
+            drv.realtime_value = 64
+            time.sleep(0.5)
+            drv.realtime_value = 127
+            time.sleep(0.5)
+
+            # Stop real-time playback
+            drv.realtime_value = 0
             drv.mode = adafruit_drv2605.MODE_INTTRIG
         """
         return self._read_u8(_DRV2605_REG_RTPIN)
 
     @realtime_value.setter
     def realtime_value(self, val: int) -> None:
-        if not 0 <= val <= 255:
-            raise ValueError("Real-Time Playback value must be a value within 0-255!")
+        if not -127 <= val <= 255:
+            raise ValueError("Real-Time Playback value must be a value between -127 and 255!")
         self._write_u8(_DRV2605_REG_RTPIN, val)
 
     def set_waveform(self, effect_id: int, slot: int = 0) -> None:
