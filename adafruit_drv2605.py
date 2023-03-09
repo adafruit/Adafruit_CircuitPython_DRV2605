@@ -208,6 +208,44 @@ class DRV2605:
         """
         return self._sequence
 
+    @property
+    def realtime_value(self) -> int:
+        """The output value used in Real-Time Playback mode. When the device is
+        switched to ``MODE_REALTIME``, the motor is driven continuously with an
+        amplitude/direction determined by this value.
+
+        By default, the device expects a SIGNED 8-bit integer, and its exact
+        effect depends on both the type of motor (ERM/LRA) and whether the device
+        is operating in open- or closed-loop (unidirectional/bidirectional) mode.
+
+        See the datasheet for more information!
+
+        E.g.:
+
+        .. code-block:: python
+
+            # Start real-time playback
+            drv.realtime_value = 0
+            drv.mode = adafruit_drv2605.MODE_REALTIME
+
+            # Buzz the motor briefly at 50% and 100% amplitude
+            drv.realtime_value = 64
+            time.sleep(0.5)
+            drv.realtime_value = 127
+            time.sleep(0.5)
+
+            # Stop real-time playback
+            drv.realtime_value = 0
+            drv.mode = adafruit_drv2605.MODE_INTTRIG
+        """
+        return self._read_u8(_DRV2605_REG_RTPIN)
+
+    @realtime_value.setter
+    def realtime_value(self, val: int) -> None:
+        if not -127 <= val <= 255:
+            raise ValueError("Real-Time Playback value must be between -127 and 255!")
+        self._write_u8(_DRV2605_REG_RTPIN, val)
+
     def set_waveform(self, effect_id: int, slot: int = 0) -> None:
         """Select an effect waveform for the specified slot (default is slot 0,
         but up to 8 effects can be combined with slot values 0 to 7).  See the
