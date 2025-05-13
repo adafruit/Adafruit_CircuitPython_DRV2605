@@ -10,7 +10,6 @@ import busio
 
 import adafruit_drv2605
 
-
 # Initialize I2C bus and DRV2605 module.
 i2c = busio.I2C(board.SCL, board.SDA)
 drv = adafruit_drv2605.DRV2605(i2c)
@@ -20,7 +19,7 @@ drv = adafruit_drv2605.DRV2605(i2c)
 #   http://www.ti.com/lit/ds/symlink/drv2605.pdf
 effect_id = 1
 while True:
-    print("Playing effect #{0}".format(effect_id))
+    print(f"Playing effect #{effect_id}")
     drv.sequence[0] = adafruit_drv2605.Effect(effect_id)  # Set the effect on slot 0.
     # You can assign effects to up to 8 different slots to combine
     # them in interesting ways. Index the sequence property with a

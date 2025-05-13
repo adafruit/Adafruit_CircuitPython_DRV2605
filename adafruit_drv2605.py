@@ -11,12 +11,13 @@ examples/simpletest.py for a demo of the usage.
 
 * Author(s): Tony DiCola
 """
-from micropython import const
 
 from adafruit_bus_device.i2c_device import I2CDevice
+from micropython import const
 
 try:
     from typing import Union
+
     from busio import I2C
 except ImportError:
     pass
@@ -94,7 +95,7 @@ class DRV2605:
         # Check chip ID is 3 or 7 (DRV2605 or DRV2605L).
         status = self._read_u8(_DRV2605_REG_STATUS)
         device_id = (status >> 5) & 0x07
-        if device_id not in (3, 7):
+        if device_id not in {3, 7}:
             raise RuntimeError("Failed to find DRV2605, check wiring!")
         # Configure registers to initialize chip.
         self._write_u8(_DRV2605_REG_MODE, 0x00)  # out of standby
@@ -261,13 +262,11 @@ class DRV2605:
             raise ValueError("Slot must be a value within 0-7!")
         self._write_u8(_DRV2605_REG_WAVESEQ1 + slot, effect_id)
 
-    # pylint: disable=invalid-name
     def use_ERM(self) -> None:
         """Use an eccentric rotating mass motor (the default)."""
         feedback = self._read_u8(_DRV2605_REG_FEEDBACK)
         self._write_u8(_DRV2605_REG_FEEDBACK, feedback & 0x7F)
 
-    # pylint: disable=invalid-name
     def use_LRM(self) -> None:
         """Use a linear resonance actuator motor."""
         feedback = self._read_u8(_DRV2605_REG_FEEDBACK)
@@ -282,7 +281,6 @@ class Effect:
 
     def __init__(self, effect_id: int) -> None:
         self._effect_id = 0
-        # pylint: disable=invalid-name
         self.id = effect_id
 
     @property
@@ -291,13 +289,11 @@ class Effect:
         return self._effect_id
 
     @property
-    # pylint: disable=invalid-name
     def id(self) -> int:
         """Effect ID."""
         return self._effect_id
 
     @id.setter
-    # pylint: disable=invalid-name
     def id(self, effect_id: int) -> None:
         """Set the effect ID."""
         if not 0 <= effect_id <= 123:
@@ -305,7 +301,7 @@ class Effect:
         self._effect_id = effect_id
 
     def __repr__(self) -> str:
-        return "{}({})".format(type(self).__qualname__, self.id)
+        return f"{type(self).__qualname__}({self.id})"
 
 
 class Pause:
@@ -339,7 +335,7 @@ class Pause:
         self._duration = 0x80 | round(duration * 100.0)
 
     def __repr__(self) -> str:
-        return "{}({})".format(type(self).__qualname__, self.duration)
+        return f"{type(self).__qualname__}({self.duration})"
 
 
 class _DRV2605_Sequence:
@@ -348,9 +344,7 @@ class _DRV2605_Sequence:
     :param DRV2605 DRV2605_instance: The DRV2605 instance
     """
 
-    def __init__(
-        self, DRV2605_instance: DRV2605  # pylint: disable=invalid-name
-    ) -> None:
+    def __init__(self, DRV2605_instance: DRV2605) -> None:
         self._drv2605 = DRV2605_instance
 
     def __setitem__(self, slot: int, effect: Union[Effect, Pause]) -> None:
@@ -359,14 +353,12 @@ class _DRV2605_Sequence:
             raise IndexError("Slot must be a value within 0-7!")
         if not isinstance(effect, (Effect, Pause)):
             raise TypeError("Effect must be either an Effect or Pause!")
-        # pylint: disable=protected-access
         self._drv2605._write_u8(_DRV2605_REG_WAVESEQ1 + slot, effect.raw_value)
 
     def __getitem__(self, slot: int) -> Union[Effect, Pause]:
         """Read an effect ID from a slot. Returns either a Pause or Effect class."""
         if not 0 <= slot <= 7:
             raise IndexError("Slot must be a value within 0-7!")
-        # pylint: disable=protected-access
         slot_contents = self._drv2605._read_u8(_DRV2605_REG_WAVESEQ1 + slot)
         if slot_contents & 0x80:
             return Pause((slot_contents & 0x7F) / 100.0)
